@@ -1,12 +1,16 @@
 <template>
-  <div class="w-full h-screen flex gap-2">
-    <SidebarMenu v-model:is-collapsed="isCollapsed" :links="links" />
-    <RouterView />
+  <div class="w-full h-screen flex flex-col">
+    <NavBar v-model="isCollapsed" />
+    <div class="w-full h-full flex">
+      <SidebarMenu v-model:is-collapsed="isCollapsed" :links="links" />
+      <RouterView />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import SidebarMenu, { LinkProp } from "@/components/SidebarMenu.vue";
+import NavBar from "@/components/NavBar.vue";
 import { ref } from "vue";
 
 const links: LinkProp[] = [

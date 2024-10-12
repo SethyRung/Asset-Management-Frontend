@@ -1,6 +1,6 @@
 <template>
   <div
-    class="min-h-screen flex flex-col justify-between gap-4 py-2 bg-white ring-1 ring-zinc-300 rounded-md transition-all duration-300 ease-out"
+    class="min-h-full overflow-y-auto flex flex-col justify-between gap-4 py-2 bg-white ring-1 ring-inset ring-zinc-300 transition-all duration-300 ease-out"
     :class="isCollapsed ? 'w-[52px]' : 'w-56'"
   >
     <nav class="grid gap-1 px-2">
@@ -69,7 +69,6 @@
       Version 1.0.0
     </p>
   </div>
-  <div></div>
 </template>
 
 <script setup lang="ts">
