@@ -1,17 +1,57 @@
 <template>
-  <div class="w-full h-screen flex justify-center items-center flex-col">
-    <Button @click="toggleHelloWorld">Hello World</Button>
-    <h1 v-if="isHelloWorldOpened" class="text-blue-500 text-2xl font-bold mt-8">
-      Hello World
-    </h1>
+  <div class="w-full h-screen flex gap-2">
+    <SidebarMenu v-model:is-collapsed="isCollapsed" :links="links" />
+    <RouterView />
   </div>
 </template>
 
 <script setup lang="ts">
-import { Button } from "@/components/ui/button";
+import SidebarMenu, { LinkProp } from "@/components/SidebarMenu.vue";
 import { ref } from "vue";
-const isHelloWorldOpened = ref(false);
-const toggleHelloWorld = () => {
-  isHelloWorldOpened.value = !isHelloWorldOpened.value;
-};
+
+const links: LinkProp[] = [
+  {
+    title: "Home",
+    label: "",
+    icon: "lucide:home",
+    path: "/",
+  },
+  {
+    title: "Assets",
+    label: "",
+    icon: "lucide:box",
+    path: "/asset",
+  },
+  {
+    title: "Category",
+    label: "",
+    icon: "lucide:layout-dashboard",
+    path: "/category",
+  },
+  {
+    title: "Users",
+    label: "",
+    icon: "lucide:users",
+    path: "/user",
+  },
+  {
+    title: "Report",
+    label: "",
+    icon: "lucide:bar-chart-3",
+    path: "/report",
+  },
+  {
+    title: "History / Maintenance",
+    label: "",
+    icon: "lucide:wrench",
+    path: "/maintenance",
+  },
+  {
+    title: "Support",
+    label: "",
+    icon: "lucide:help-circle",
+    path: "/support",
+  },
+];
+const isCollapsed = ref<boolean>(false);
 </script>
