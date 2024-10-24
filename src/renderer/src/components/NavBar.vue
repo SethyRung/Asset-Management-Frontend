@@ -1,6 +1,6 @@
 <template>
   <div
-    class="min-h-16 pr-4 flex justify-between items-center bg-white ring-1 ring-zinc-300"
+    class="w-full h-16 pr-4 flex justify-between items-center bg-white ring-1 ring-zinc-300"
   >
     <Button
       variant="ghost"

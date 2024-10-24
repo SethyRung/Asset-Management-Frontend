@@ -1,7 +1,7 @@
 <template>
   <div
     class="min-h-full overflow-y-auto flex flex-col justify-between gap-4 py-2 bg-white ring-1 ring-inset ring-zinc-300 transition-all duration-300 ease-out"
-    :class="isCollapsed ? 'w-[52px]' : 'w-56'"
+    :class="isCollapsed ? 'min-w-[52px]' : 'min-w-56'"
   >
     <nav class="grid gap-1 px-2">
       <template v-for="(link, index) of links">

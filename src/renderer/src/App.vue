@@ -1,7 +1,7 @@
 <template>
-  <div class="w-full h-screen flex flex-col">
+  <div class="w-screen h-screen overflow-x-auto">
     <NavBar v-model="isCollapsed" />
-    <div class="w-full h-full flex">
+    <div class="w-full min-h-[calc(100%_-_64px)] h-fit flex">
       <SidebarMenu v-model:is-collapsed="isCollapsed" :links="links" />
       <RouterView />
     </div>
