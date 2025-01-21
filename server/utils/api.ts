@@ -1,0 +1,38 @@
+import type { ResponseBody } from "~/types/ResponseBody";
+import type { H3Event } from "h3";
+import type { NitroFetchOptions } from "nitropack";
+
+export const api = async <T>(
+  url: string,
+  options: NitroFetchOptions<
+    string,
+    | "get"
+    | "head"
+    | "patch"
+    | "post"
+    | "put"
+    | "delete"
+    | "connect"
+    | "options"
+    | "trace"
+  >,
+  event: H3Event,
+) => {
+  const config = useRuntimeConfig();
+  const baseUrl = config.apiBaseUrl;
+  const accessToken = getRequestHeader(event, "Authorization");
+  options = {
+    baseURL: baseUrl,
+    onRequest({ options }) {
+      options.headers = {
+        ...options.headers,
+        ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
+      };
+    },
+  };
+  try {
+    return await $fetch<ResponseBody<T | null>>(url, options);
+  } catch (e) {
+    console.log(e);
+  }
+};
