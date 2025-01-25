@@ -10,14 +10,16 @@ export default defineNuxtConfig({
     "dayjs-nuxt",
     "@nuxtjs/google-fonts",
   ],
+  runtimeConfig: {
+    apiBaseUrl: "",
+  },
   colorMode: {
     preference: "light",
   },
   googleFonts: {
     download: true,
     families: {
-      Inter: [100, 200, 300, 400, 500, 600, 700, 800, 900],
-      "Red Hat Dispay": [100, 200, 300, 400, 500, 600, 700, 800, 900],
+      "IBM Plex Sans": [100, 200, 300, 400, 500, 600, 700],
     },
   },
 });

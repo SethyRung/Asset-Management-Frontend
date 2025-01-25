@@ -20,5 +20,6 @@ export default defineAppConfig({
         size: "md",
       },
     },
+    primary: "blue",
   },
 });
