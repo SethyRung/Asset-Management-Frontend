@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-full h-16 px-4 sticky top-0 flex justify-between items-center border-b border-zinc-300 bg-white"
+    class="w-full h-16 px-4 sticky top-0 z-50 flex justify-between items-center border-b border-zinc-300 bg-white"
   >
     <UButton
       :icon="isOpen ? 'i-lucide-panel-left-open' : 'i-lucide-panel-left-close'"

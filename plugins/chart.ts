@@ -6,6 +6,7 @@ import {
   BarElement,
   CategoryScale,
   LinearScale,
+  ArcElement,
 } from "chart.js";
 export default defineNuxtPlugin(() => {
   Chart.register(
@@ -15,5 +16,6 @@ export default defineNuxtPlugin(() => {
     Title,
     Tooltip,
     Legend,
+    ArcElement,
   );
 });

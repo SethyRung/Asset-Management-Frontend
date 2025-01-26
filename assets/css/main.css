@@ -15,6 +15,10 @@
   --color-primary-950: #152156;
 
   --font-ibmPlexSans: "IBM Plex Sans", sans-serif;
+
+  --breakpoint-mobile: 390px;
+  --breakpoint-tablet: 844px;
+  --breakpoint-computer: 1280px;
 }
 
 ::-webkit-scrollbar {
