@@ -12,6 +12,22 @@ export default defineNuxtConfig({
   ],
   runtimeConfig: {
     apiBaseUrl: "",
+    public: {
+      appVersion: "",
+    },
+  },
+  ui: {
+    theme: {
+      colors: [
+        "primary",
+        "secondary",
+        "tertiary",
+        "info",
+        "success",
+        "warning",
+        "error",
+      ],
+    },
   },
   colorMode: {
     preference: "light",

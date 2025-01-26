@@ -20,6 +20,9 @@ export default defineAppConfig({
         size: "md",
       },
     },
-    primary: "blue",
+    colors: {
+      primary: "primary",
+      neutral: "zinc",
+    },
   },
 });

@@ -4,7 +4,7 @@
   >
     <UButton
       :icon="isOpen ? 'i-lucide-panel-left-open' : 'i-lucide-panel-left-close'"
-      color="white"
+      color="neutral"
       variant="ghost"
       @click="handleSideBarClick"
     />
@@ -12,12 +12,12 @@
     <UPopover
       mode="click"
       :popper="{ placement: 'bottom-end' }"
-      :ui="{ base: 'p-2' }"
+      :ui="{ content: 'p-2' }"
     >
       <UAvatar size="md" alt="Benjamin Canac" />
 
-      <template #panel>
-        <UVerticalNavigation :links="links" />
+      <template #content>
+        <UNavigationMenu orientation="vertical" :items="items" />
       </template>
     </UPopover>
   </div>
@@ -33,7 +33,7 @@ const handleSideBarClick = () => {
   isOpen.value = !isOpen.value;
 };
 
-const links = [
+const items = [
   [
     {
       label: "Profile",
@@ -43,7 +43,7 @@ const links = [
     {
       label: "Logout",
       icon: "i-lucide-log-out",
-      click: () => {
+      onSelect: () => {
         console.log("logout");
       },
     },

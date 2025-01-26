@@ -1,3 +1,22 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+@theme {
+  --color-primary-50: #eef5ff;
+  --color-primary-100: #dae8ff;
+  --color-primary-200: #bdd8ff;
+  --color-primary-300: #90c0ff;
+  --color-primary-400: #4891ff;
+  --color-primary-500: #3577fc;
+  --color-primary-600: #1f57f1;
+  --color-primary-700: #1741de;
+  --color-primary-800: #1936b4;
+  --color-primary-900: #1a328e;
+  --color-primary-950: #152156;
+
+  --font-ibmPlexSans: "IBM Plex Sans", sans-serif;
+}
+
 ::-webkit-scrollbar {
   background-color: transparent;
   height: 0.6em;

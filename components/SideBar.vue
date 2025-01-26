@@ -1,19 +1,15 @@
 <template>
   <div>
-    <USlideover v-model="isOpen" :ui="{ width: 'max-w-56', padding: 'p-2' }">
-      <UVerticalNavigation
-        :links="links"
-        :ui="{
-          active: 'text-white before:bg-primary-500 dark:before:bg-gray-800',
-          inactive:
-            'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:before:bg-gray-50 dark:hover:before:bg-gray-800/50',
-          icon: {
-            base: 'size-4',
-            active: 'text-white',
-          },
-        }"
-      />
-      <p class="mt-auto text-center font-ibmPlexSans text-xs">Version: 1.0.0</p>
+    <USlideover
+      v-model:open="isOpen"
+      :ui="{ content: 'max-w-56 p-2 divide-y-0' }"
+    >
+      <template #content>
+        <UNavigationMenu orientation="vertical" :items="items" />
+        <p class="mt-auto text-center font-ibmPlexSans text-xs text-zinc-400">
+          Version: {{ config.public.appVersion }}
+        </p>
+      </template>
     </USlideover>
   </div>
 </template>
@@ -24,7 +20,7 @@ const isOpen = defineModel("isOpen", {
   default: false,
 });
 
-const links = [
+const items = ref([
   {
     label: "Home",
     icon: "i-lucide-house",
@@ -60,5 +56,7 @@ const links = [
     icon: "i-lucide-circle-help",
     to: "/help",
   },
-];
+]);
+
+const config = useRuntimeConfig();
 </script>
