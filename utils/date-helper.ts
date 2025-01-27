@@ -11,6 +11,8 @@ const endOfMonth = dayjs().endOf("month").toDate();
 const convertDateToString = (date: Date) => dayjs(date).format("DD/MM/YYYY");
 const convertStringToDate = (date: string) =>
   dayjs(date, "DD/MM/YYYY").toDate();
+const formatDate = (date: Date | string, format: string) =>
+  dayjs(date).format(format);
 
 export {
   startOfDay,
@@ -19,4 +21,5 @@ export {
   endOfMonth,
   convertDateToString,
   convertStringToDate,
+  formatDate,
 };
