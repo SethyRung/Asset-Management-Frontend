@@ -15,7 +15,7 @@
     </UButton>
 
     <template #content>
-      <UCalendar v-model="modelValue" class="p-2" :number-of-months="2" range />
+      <UCalendar v-model="modelValue" class="p-2" :number-of-months="1" range />
     </template>
   </UPopover>
 </template>
@@ -26,14 +26,21 @@ import {
   DateFormatter,
   getLocalTimeZone,
 } from "@internationalized/date";
+import dayjs from "dayjs";
 
 const df = new DateFormatter("en-US", {
   dateStyle: "medium",
 });
 
+const now = dayjs();
+
 const modelValue = shallowRef({
-  start: new CalendarDate(2022, 1, 20),
-  end: new CalendarDate(2022, 2, 10),
+  start: new CalendarDate(now.year(), now.month(), 1),
+  end: new CalendarDate(
+    now.year(),
+    now.month(),
+    now.endOf("month").daysInMonth(),
+  ),
 });
 
 withDefaults(
