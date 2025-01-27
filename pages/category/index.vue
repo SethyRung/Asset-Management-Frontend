@@ -46,6 +46,12 @@
         />
       </template>
     </UModal>
+    <DeleteDialog
+      :open="action === 'Delete'"
+      title="Delete Category"
+      content="Are you sure to delete this category?"
+      @update:open="action = 'Create'"
+    />
   </div>
 </template>
 
@@ -54,6 +60,7 @@ import type { TableColumn } from "@nuxt/ui";
 import type { Row } from "@tanstack/vue-table";
 import type { Category } from "~/types/Category";
 import CategoryForm from "~/components/Forms/CategoryForm.vue";
+import DeleteDialog from "~/components/Dialogs/DeleteDialog.vue";
 
 const UButton = resolveComponent("UButton");
 const UDropdownMenu = resolveComponent("UDropdownMenu");
@@ -118,6 +125,9 @@ const getRowItems = (row: Row<Category>) => {
       label: "Delete",
       color: "error",
       icon: "i-lucide-trash-2",
+      onSelect: () => {
+        action.value = "Delete";
+      },
     },
   ];
 };
