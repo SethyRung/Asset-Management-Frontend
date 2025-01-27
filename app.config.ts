@@ -20,6 +20,11 @@ export default defineAppConfig({
         size: "md",
       },
     },
+    dropdownMenu: {
+      default: {
+        size: "md",
+      },
+    },
     colors: {
       primary: "primary",
       neutral: "zinc",
