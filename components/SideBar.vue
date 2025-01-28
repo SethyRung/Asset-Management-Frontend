@@ -27,9 +27,9 @@ const items = ref([
     to: "/",
   },
   {
-    label: "Assets",
+    label: "Asset",
     icon: "i-lucide-box",
-    to: "/assets",
+    to: "/asset",
   },
   {
     label: "Category",
