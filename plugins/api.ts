@@ -7,7 +7,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   const REFRESH_TOKEN_PATH = "/auth/refresh";
 
   const accessToken = useCookie("access_token", {
-    maxAge: 30 * 60, // 30 minutes
+    maxAge: 15 * 60, // 15 minutes
     secure: true,
     sameSite: "strict",
   });

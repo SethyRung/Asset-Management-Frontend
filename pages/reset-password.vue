@@ -17,7 +17,7 @@
           class="space-y-4 md:space-y-6"
           @submit="onSubmit"
         >
-          <UFormField label="Password" name="password">
+          <UFormField label="New Password" name="password">
             <UInput
               v-model="state.password"
               :type="isShowPassword ? 'text' : 'password'"
@@ -65,7 +65,12 @@
               </template>
             </UInput>
           </UFormField>
-          <UButton type="submit" size="xl" class="w-full justify-center">
+          <UButton
+            type="submit"
+            size="xl"
+            :disabled="isSubmitting"
+            class="w-full justify-center"
+          >
             Reset Password
           </UButton>
         </UForm>
@@ -77,12 +82,15 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from "@nuxt/ui";
 import * as z from "zod";
+import { ResponseStatusCode } from "~/enums/base";
 
 definePageMeta({
   layout: "blank",
 });
 
 const toast = useToast();
+const { start, finish } = useLoadingIndicator();
+const route = useRoute();
 
 const schema = z
   .object({
@@ -104,12 +112,36 @@ const state = reactive<Partial<Schema>>({
 const isShowPassword = ref<boolean>(false);
 const isShowConfirmPassword = ref<boolean>(false);
 
-const onSubmit = (event: FormSubmitEvent<Schema>) => {
-  toast.add({
-    title: "Success",
-    description: "The form has been submitted.",
-    color: "success",
+const isSubmitting = ref<boolean>(false);
+
+const onSubmit = async (event: FormSubmitEvent<Schema>) => {
+  start();
+  isSubmitting.value = true;
+
+  const response = await useApi("/api/auth/reset-password", {
+    method: "POST",
+    body: {
+      resetId: route.query.resetId,
+      newPassword: event.data.password,
+      confirmPassword: event.data.confirmPassword,
+    },
   });
-  console.log(event.data);
+  if (response.status.code === ResponseStatusCode.OK) {
+    toast.add({
+      title: "Reset password",
+      description: "Password has been reset successfully.",
+      color: "success",
+    });
+    navigateTo("/sign-in", { replace: true });
+  } else {
+    toast.add({
+      title: "Error",
+      description: response.status.errorMessage,
+      color: "error",
+    });
+  }
+
+  isSubmitting.value = false;
+  finish();
 };
 </script>

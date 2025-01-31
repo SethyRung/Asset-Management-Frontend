@@ -51,7 +51,7 @@
               Forgot password?
             </NuxtLink>
           </div>
-          <UButton type="submit" size="xl" class="w-full justify-center">
+          <UButton type="submit" size="xl" :disabled="isSubmitting" class="w-full justify-center">
             Sign in
           </UButton>
           <p
@@ -74,12 +74,14 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from "@nuxt/ui";
 import * as z from "zod";
+import { ResponseStatusCode } from "~/enums/base";
 
 definePageMeta({
   layout: "blank",
 });
 
 const toast = useToast();
+const { start, finish } = useLoadingIndicator();
 
 const schema = z.object({
   email: z.string({ message: "Email is required" }).email("Invalid email"),
@@ -94,13 +96,30 @@ const state = reactive<Partial<Schema>>({
 });
 
 const isShowPassword = ref<boolean>(false);
+const isSubmitting = ref<boolean>(false);
 
-const onSubmit = (event: FormSubmitEvent<Schema>) => {
-  toast.add({
-    title: "Success",
-    description: "The form has been submitted.",
-    color: "success",
+const onSubmit = async(event: FormSubmitEvent<Schema>) => {
+  start();
+  isSubmitting.value=true;
+  
+  const response = await useApi("/api/auth/sign-in", {
+    method: "POST",
+    body: {
+      email: event.data.email,
+      password: event.data.password,
+    },
   });
-  console.log(event.data);
+  if (response.status.code === ResponseStatusCode.OK) {
+    navigateTo('/', {replace: true});
+  } else {
+    toast.add({
+      title: "Error",
+      description: response.status.errorMessage,
+      color: "error",
+    });
+  }
+  
+  isSubmitting.value=false;
+  finish();
 };
 </script>

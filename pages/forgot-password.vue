@@ -28,7 +28,7 @@
               :ui="{ root: 'w-full' }"
             />
           </UFormField>
-          <UButton type="submit" size="xl" class="w-full justify-center">
+          <UButton type="submit" size="xl" :disabled="isSubmitting" class="w-full justify-center">
             Continue
           </UButton>
           <p
@@ -50,12 +50,14 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from "@nuxt/ui";
 import * as z from "zod";
+import { ResponseStatusCode } from "~/enums/base";
 
 definePageMeta({
   layout: "blank",
 });
 
 const toast = useToast();
+const { start, finish } = useLoadingIndicator();
 
 const schema = z.object({
   email: z.string({ message: "Email is required" }).email("Invalid email"),
@@ -67,12 +69,33 @@ const state = reactive<Partial<Schema>>({
   email: undefined,
 });
 
-const onSubmit = (event: FormSubmitEvent<Schema>) => {
-  toast.add({
-    title: "Success",
-    description: "The form has been submitted.",
-    color: "success",
+const isSubmitting = ref<boolean>(false);
+
+const onSubmit = async(event: FormSubmitEvent<Schema>) => {
+  start();
+  isSubmitting.value=true;
+  
+  const response = await useApi("/api/auth/reset-password", {
+    method: "GET",
+    query: {
+      email: event.data.email,
+    },
   });
-  console.log(event.data);
+  if (response.status.code === ResponseStatusCode.OK) {
+    toast.add({
+      title: "Forgot password",
+      description: "Password reset email sent! Check your inbox for instructions.",
+      color: "success",
+    });
+  } else {
+    toast.add({
+      title: "Error",
+      description: response.status.errorMessage,
+      color: "error",
+    });
+  }
+  
+  isSubmitting.value=false;
+  finish();
 };
 </script>
