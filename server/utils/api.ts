@@ -28,7 +28,7 @@ export const api = async <T>(
     onRequest({ options }) {
       options.headers = {
         ...options.headers,
-        ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
+        ...(accessToken && { Authorization: accessToken }),
       };
     },
   };

@@ -16,6 +16,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     secure: true,
     sameSite: "strict",
   });
+  const isAuthenticated = useCookie<boolean>("isAuthenticated");
   const api = $fetch.create({
     onRequest({ options }) {
       options.headers = {
@@ -76,7 +77,8 @@ export default defineNuxtPlugin((nuxtApp) => {
   const handleAuthError = () => {
     accessToken.value = null;
     refreshToken.value = null;
-    navigateTo("/login");
+    isAuthenticated.value = false;
+    navigateTo("/sign-in");
   };
 
   nuxtApp.provide("api", api);

@@ -5,7 +5,19 @@
       :ui="{ content: 'max-w-56 p-2 divide-y-0' }"
     >
       <template #content>
-        <UNavigationMenu orientation="vertical" :items="items" />
+        <UNavigationMenu
+          orientation="vertical"
+          :items="
+            items.filter(
+              ({ to }) =>
+                !!routeList.find(
+                  (route) =>
+                    route.path === to &&
+                    route.permissions.includes(profileStore.profile.role),
+                ),
+            )
+          "
+        />
         <p class="mt-auto text-center font-ibmPlexSans text-xs text-zinc-400">
           Version: {{ config.public.appVersion }}
         </p>
@@ -15,6 +27,10 @@
 </template>
 
 <script lang="ts" setup>
+import { routeList } from "~/constraints/route";
+
+const profileStore = useProfileStore();
+
 const isOpen = defineModel("isOpen", {
   type: Boolean,
   default: false,

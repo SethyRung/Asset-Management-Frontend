@@ -6,6 +6,7 @@ export default defineNuxtConfig({
     "@nuxt/ui",
     "@nuxt/eslint",
     "@pinia/nuxt",
+    "pinia-plugin-persistedstate/nuxt",
     "@vueuse/nuxt",
     "dayjs-nuxt",
     "@nuxtjs/google-fonts",

@@ -5,3 +5,9 @@ export enum ResponseStatusCode {
   FORBIDDEN = "1002",
   INTERNAL_SERVER_ERROR = "1003",
 }
+
+export enum Role {
+  ADMIN = "ADMIN",
+  USER = "USER",
+  AUDIT = "AUDIT",
+}

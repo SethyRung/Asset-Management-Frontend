@@ -51,7 +51,12 @@
               Forgot password?
             </NuxtLink>
           </div>
-          <UButton type="submit" size="xl" :disabled="isSubmitting" class="w-full justify-center">
+          <UButton
+            type="submit"
+            size="xl"
+            :disabled="isSubmitting"
+            class="w-full justify-center"
+          >
             Sign in
           </UButton>
           <p
@@ -75,6 +80,7 @@
 import type { FormSubmitEvent } from "@nuxt/ui";
 import * as z from "zod";
 import { ResponseStatusCode } from "~/enums/base";
+import type { User } from "~/types/User";
 
 definePageMeta({
   layout: "blank",
@@ -98,10 +104,28 @@ const state = reactive<Partial<Schema>>({
 const isShowPassword = ref<boolean>(false);
 const isSubmitting = ref<boolean>(false);
 
-const onSubmit = async(event: FormSubmitEvent<Schema>) => {
+const isAuthenticated = useCookie<boolean>("isAuthenticated");
+isAuthenticated.value = false;
+
+const profileStore = useProfileStore();
+
+const getProfile = async () => {
+  const response = await useApi<User>("/api/profile", { method: "GET" });
+  if (response.status.code === ResponseStatusCode.OK) {
+    Object.assign(profileStore.profile, response.data);
+  } else {
+    toast.add({
+      title: "Error",
+      description: response.status.errorMessage,
+      color: "error",
+    });
+  }
+};
+
+const onSubmit = async (event: FormSubmitEvent<Schema>) => {
   start();
-  isSubmitting.value=true;
-  
+  isSubmitting.value = true;
+
   const response = await useApi("/api/auth/sign-in", {
     method: "POST",
     body: {
@@ -110,7 +134,9 @@ const onSubmit = async(event: FormSubmitEvent<Schema>) => {
     },
   });
   if (response.status.code === ResponseStatusCode.OK) {
-    navigateTo('/', {replace: true});
+    isAuthenticated.value = true;
+    await getProfile();
+    navigateTo("/", { replace: true });
   } else {
     toast.add({
       title: "Error",
@@ -118,8 +144,8 @@ const onSubmit = async(event: FormSubmitEvent<Schema>) => {
       color: "error",
     });
   }
-  
-  isSubmitting.value=false;
+
+  isSubmitting.value = false;
   finish();
 };
 </script>
