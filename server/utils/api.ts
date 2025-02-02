@@ -21,14 +21,14 @@ export const api = async <T>(
 ) => {
   const config = useRuntimeConfig();
   const baseUrl = config.apiBaseUrl;
-  const accessToken = getRequestHeader(event, "Authorization");
+  const token = getRequestHeader(event, "Authorization");
   options = {
     ...options,
     baseURL: baseUrl,
     onRequest({ options }) {
       options.headers = {
         ...options.headers,
-        ...(accessToken && { Authorization: accessToken }),
+        ...(token && { Authorization: token }),
       };
     },
   };

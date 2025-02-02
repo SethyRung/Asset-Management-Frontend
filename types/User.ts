@@ -7,4 +7,5 @@ export type User = {
   joinDate: string;
   status: boolean;
   role: string;
+  profile: string;
 };

@@ -28,7 +28,12 @@
               :ui="{ root: 'w-full' }"
             />
           </UFormField>
-          <UButton type="submit" size="xl" :disabled="isSubmitting" class="w-full justify-center">
+          <UButton
+            type="submit"
+            size="xl"
+            :loading="isSubmitting"
+            class="w-full justify-center"
+          >
             Continue
           </UButton>
           <p
@@ -71,10 +76,10 @@ const state = reactive<Partial<Schema>>({
 
 const isSubmitting = ref<boolean>(false);
 
-const onSubmit = async(event: FormSubmitEvent<Schema>) => {
+const onSubmit = async (event: FormSubmitEvent<Schema>) => {
   start();
-  isSubmitting.value=true;
-  
+  isSubmitting.value = true;
+
   const response = await useApi("/api/auth/reset-password", {
     method: "GET",
     query: {
@@ -84,7 +89,8 @@ const onSubmit = async(event: FormSubmitEvent<Schema>) => {
   if (response.status.code === ResponseStatusCode.OK) {
     toast.add({
       title: "Forgot password",
-      description: "Password reset email sent! Check your inbox for instructions.",
+      description:
+        "Password reset email sent! Check your inbox for instructions.",
       color: "success",
     });
   } else {
@@ -94,8 +100,8 @@ const onSubmit = async(event: FormSubmitEvent<Schema>) => {
       color: "error",
     });
   }
-  
-  isSubmitting.value=false;
+
+  isSubmitting.value = false;
   finish();
 };
 </script>

@@ -94,7 +94,7 @@
           <UButton
             type="submit"
             size="xl"
-            :disabled="isSubmitting"
+            :loading="isSubmitting"
             class="w-full justify-center"
           >
             Sign up

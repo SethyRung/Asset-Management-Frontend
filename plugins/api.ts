@@ -4,15 +4,13 @@ import type { NitroFetchOptions } from "nitropack";
 
 export default defineNuxtPlugin((nuxtApp) => {
   const ACCESS_TOKEN_EXPIRED = "Access token is already expired";
-  const REFRESH_TOKEN_PATH = "/auth/refresh";
+  const REFRESH_TOKEN_PATH = "/api/auth/refresh";
 
   const accessToken = useCookie("access_token", {
-    maxAge: 15 * 60, // 15 minutes
     secure: true,
     sameSite: "strict",
   });
   const refreshToken = useCookie("refresh_token", {
-    maxAge: 60 * 60 * 24, // 1 days
     secure: true,
     sameSite: "strict",
   });
@@ -39,9 +37,9 @@ export default defineNuxtPlugin((nuxtApp) => {
             const resRefresh = await $fetch<
               ResponseBody<{ accessToken: string; refreshToken: string }>
             >(REFRESH_TOKEN_PATH, {
-              method: "post",
-              body: {
-                refreshToken: refreshToken.value,
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${refreshToken.value}`,
               },
             });
 

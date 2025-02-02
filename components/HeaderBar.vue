@@ -14,7 +14,10 @@
       :popper="{ placement: 'bottom-end' }"
       :ui="{ content: 'p-2' }"
     >
-      <UAvatar size="md" alt="Benjamin Canac" />
+      <UAvatar
+        size="md"
+        :alt="`${profileStore.profile.firstName} ${profileStore.profile.lastName}`"
+      />
 
       <template #content>
         <UNavigationMenu orientation="vertical" :items="items" />
@@ -28,6 +31,8 @@ const isOpen = defineModel("isOpen", {
   type: Boolean,
   default: false,
 });
+
+const profileStore = useProfileStore();
 
 const handleSideBarClick = () => {
   isOpen.value = !isOpen.value;
