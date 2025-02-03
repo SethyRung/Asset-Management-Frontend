@@ -142,6 +142,7 @@ const state = reactive<Partial<Schema>>({
   profile: undefined,
 });
 
+// set initial form data
 if (props.action !== "Create" && props.initialData) {
   const data = props.initialData;
   state.firstName = data.firstName;

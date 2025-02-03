@@ -6,3 +6,8 @@
     </NuxtLayout>
   </UApp>
 </template>
+<script setup>
+useHead({
+  title: "Asset Management Frontend",
+});
+</script>

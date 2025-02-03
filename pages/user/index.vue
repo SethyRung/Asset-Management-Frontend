@@ -272,6 +272,7 @@ const handleDeleteUser = async (id: number) => {
       description: "User has been successfully deleted.",
       color: "success",
     });
+    getUsers();
     clearData();
   } else {
     toast.add({

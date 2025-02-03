@@ -1,6 +1,12 @@
 <template>
   <UPopover>
-    <UButton :color="color" :variant="variant" icon="i-lucide-calendar">
+    <UButton
+      :color="color"
+      :variant="variant"
+      :size="size"
+      icon="i-lucide-calendar"
+      :ui="ui"
+    >
       <template v-if="modelValue.start">
         <template v-if="modelValue.end">
           {{ df.format(modelValue.start.toDate(getLocalTimeZone())) }} -
@@ -55,7 +61,21 @@ withDefaults(
       | "error"
       | "neutral";
     variant?: "link" | "solid" | "outline" | "soft" | "subtle" | "ghost";
+    size?: "xs" | "sm" | "md" | "lg" | "xl";
+    ui?: {
+      base?: string;
+      label?: string;
+      leadingIcon?: string;
+      leadingAvatar?: string;
+      leadingAvatarSize?: string;
+      trailingIcon?: string;
+    };
   }>(),
-  { color: "neutral", variant: "subtle" },
+  {
+    color: "neutral",
+    variant: "subtle",
+    size: "sm",
+    ui: undefined,
+  },
 );
 </script>
