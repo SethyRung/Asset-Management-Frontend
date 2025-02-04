@@ -1,13 +1,15 @@
 <template>
-  <UPopover>
+  <UPopover v-model:open="open">
     <UButton
       :color="color"
       :variant="variant"
       :size="size"
       icon="i-lucide-calendar"
+      :disabled="disabled"
       :ui="ui"
+      @click="open = true"
     >
-      {{ modelValue && df.format(value.toDate(getLocalTimeZone())) }}
+      {{ df.format(value.toDate(getLocalTimeZone())) }}
     </UButton>
 
     <template #content>
@@ -23,6 +25,8 @@ import {
   getLocalTimeZone,
 } from "@internationalized/date";
 
+const open = ref(false);
+
 const df = new DateFormatter("en-US", {
   dateStyle: "medium",
 });
@@ -33,12 +37,12 @@ const value = ref<CalendarDate>(
   modelValue.value
     ? new CalendarDate(
         modelValue.value.getFullYear(),
-        modelValue.value.getMonth(),
+        modelValue.value.getMonth() + 1, //because Date().getMonth() start from 0 instead of 1
         modelValue.value.getDate(),
       )
     : new CalendarDate(
         new Date().getFullYear(),
-        new Date().getMonth(),
+        new Date().getMonth() + 1, //because Date().getMonth() start from 0 instead of 1
         new Date().getDate(),
       ),
 );
@@ -60,6 +64,7 @@ withDefaults(
       | "neutral";
     variant?: "link" | "solid" | "outline" | "soft" | "subtle" | "ghost";
     size?: "xs" | "sm" | "md" | "lg" | "xl";
+    disabled?: boolean;
     ui?: {
       base?: string;
       label?: string;
@@ -73,6 +78,7 @@ withDefaults(
     color: "neutral",
     variant: "subtle",
     size: "sm",
+    disabled: false,
     ui: undefined,
   },
 );
