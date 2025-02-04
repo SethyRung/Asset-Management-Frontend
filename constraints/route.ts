@@ -13,8 +13,12 @@ export const routeList: { path: string; permissions: string[] }[] = [
   { path: "/category", permissions: [Role.ADMIN, Role.AUDIT] },
   { path: "/asset", permissions: [Role.ADMIN, Role.AUDIT, Role.USER] },
   {
-    path: "/history-maintenance",
-    permissions: [Role.ADMIN, Role.AUDIT, Role.USER],
+    path: "/maintenance",
+    permissions: [Role.ADMIN, Role.AUDIT],
+  },
+  {
+    path: "/history",
+    permissions: [Role.ADMIN, Role.AUDIT],
   },
   {
     path: "/help",

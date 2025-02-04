@@ -63,9 +63,14 @@ const items = ref([
     to: "/report",
   },
   {
-    label: "History / Maintenance",
+    label: "Maintenance",
     icon: "i-lucide-hammer",
-    to: "/history-maintenance",
+    to: "/maintenance",
+  },
+  {
+    label: "History",
+    icon: "i-lucide-history",
+    to: "/history",
   },
   {
     label: "Help / support",

@@ -1,4 +1,5 @@
 import type { Asset } from "./Asset";
+import type { User } from "./User";
 
 export type Maintenance = {
   id: number;
@@ -6,5 +7,5 @@ export type Maintenance = {
   maintenanceDate: string;
   description: string;
   cost: number;
-  performedBy: number;
+  performedBy: User;
 };

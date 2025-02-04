@@ -5,22 +5,19 @@
     class="w-full h-full space-y-6"
     @submit="onSubmit"
   >
-    <UFormField label="Asset" name="asset">
-      <USelectMenu
-        v-model="state.asset"
-        placeholder="Select Asset"
+    <UFormField label="Serial Number" name="serialNumber">
+      <UInput
+        v-model="state.serialNumber"
+        :disabled="isDisabled"
         size="xl"
-        label-key="name"
-        value-key="id"
-        :items="assetList"
-        :search-input="false"
-        class="w-full"
+        :ui="{ root: 'w-full' }"
       />
     </UFormField>
 
     <UFormField label="Maintenance Date" name="maintenanceDate">
       <DatePicker
         v-model="state.maintenanceDate"
+        :disabled="isDisabled"
         variant="outline"
         placeholder="Warranty Expiry Date"
         size="xl"
@@ -29,16 +26,28 @@
     </UFormField>
 
     <UFormField label="Description" name="description">
-      <UInput v-model="state.description" size="xl" :ui="{ root: 'w-full' }" />
+      <UInput
+        v-model="state.description"
+        :disabled="isDisabled"
+        size="xl"
+        :ui="{ root: 'w-full' }"
+      />
     </UFormField>
 
     <UFormField label="Cost" name="cost">
-      <UInput v-model="state.cost" size="xl" :ui="{ root: 'w-full' }" />
+      <UInput
+        v-model="state.cost"
+        type="number"
+        :disabled="isDisabled"
+        size="xl"
+        :ui="{ root: 'w-full' }"
+      />
     </UFormField>
 
     <UFormField label="Performed By" name="performedBy">
       <USelectMenu
         v-model="state.performedBy"
+        :disabled="isDisabled"
         placeholder="Select User"
         size="xl"
         label-key="username"
@@ -46,10 +55,11 @@
         :items="userList"
         :search-input="false"
         class="w-full"
+        :loading="statusItems === 'pending'"
       />
     </UFormField>
 
-    <div class="flex justify-between">
+    <div v-if="!isDisabled" class="flex justify-between">
       <UButton
         size="xl"
         color="neutral"
@@ -75,15 +85,27 @@
 import type { FormSubmitEvent } from "@nuxt/ui";
 import * as z from "zod";
 import DatePicker from "../Inputs/DatePicker.vue";
-import type { Asset } from "~/types/Asset";
 import type { User } from "~/types/User";
+import type { FormAction } from "~/types/FormAction";
+import type { Maintenance } from "~/types/Maintenance";
+import { ResponseStatusCode } from "~/enums/base";
+
+const props = withDefaults(
+  defineProps<{
+    action: FormAction;
+    initialData?: Maintenance;
+  }>(),
+  { initialData: undefined },
+);
 
 const toast = useToast();
+const { start, finish } = useLoadingIndicator();
+const isDisabled = computed(() => props.action === "View");
 
 const schema = z.object({
-  asset: z.number(),
+  serialNumber: z.string(),
   maintenanceDate: z.date(),
-  description: z.string().min(8, "Must be at least 8 characters"),
+  description: z.string(),
   cost: z.number(),
   performedBy: z.number(),
 });
@@ -91,69 +113,115 @@ const schema = z.object({
 type Schema = z.output<typeof schema>;
 
 const state = reactive<Partial<Schema>>({
-  asset: undefined,
+  serialNumber: undefined,
   maintenanceDate: undefined,
   description: undefined,
   cost: undefined,
   performedBy: undefined,
 });
 
-const assetList = ref<Asset[]>([
-  {
-    id: 1,
-    name: "Computer",
-    serialNumber: "12345",
-    categoryId: 1,
-    status: "Active",
-    acquisitionDate: "2023-01-01",
-    warrantyExpiryDate: "2024-01-01",
-    location: "Office",
-    assignedTo: 1,
-    documents: ["invoice.pdf"],
-  },
-]);
+// set initial form data
+if (props.action !== "Create" && props.initialData) {
+  const data = props.initialData;
+  state.serialNumber = data.asset.serialNumber;
+  state.maintenanceDate = convertStringToDate(data.maintenanceDate);
+  state.description = data.description;
+  state.cost = data.cost;
+  state.performedBy = data.performedBy.id;
+}
 
-const userList = ref<User[]>([
-  {
-    id: 1,
-    firstName: "John",
-    lastName: "Doe",
-    username: "johndoe",
-    email: "john.doe@example.com",
-    joinDate: "2021-01-01",
-    status: true,
-    role: "Admin",
-  },
-  {
-    id: 2,
-    firstName: "Jane",
-    lastName: "Smith",
-    username: "janesmith",
-    email: "jane.smith@example.com",
-    joinDate: "2021-02-01",
-    status: true,
-    role: "User",
-  },
-  {
-    id: 3,
-    firstName: "Alice",
-    lastName: "Johnson",
-    username: "alicejohnson",
-    email: "alice.johnson@example.com",
-    joinDate: "2021-03-01",
-    status: true,
-    role: "Audit",
-  },
-]);
+const userList = ref<User[]>([]);
+const { data: resItems, status: statusItems } = await useFetchApi<{
+  users: User[];
+}>("/api/maintenance/items", { method: "GET", lazy: true });
 
-const onSubmit = (event: FormSubmitEvent<Schema>) => {
-  toast.add({
-    title: "Success",
-    description: "The form has been submitted.",
-    color: "success",
+watch(statusItems, (newValue) => {
+  if (
+    newValue === "success" &&
+    resItems.value &&
+    resItems.value.status.code === ResponseStatusCode.OK
+  ) {
+    userList.value = resItems.value.data.users;
+  }
+});
+
+const isSubmitting = ref<boolean>(false);
+
+const handleCreateMaintenance = async (data: Schema) => {
+  start();
+  isSubmitting.value = true;
+
+  const response = await useApi<Maintenance>("/api/maintenance", {
+    method: "POST",
+    body: {
+      serialNumber: data.serialNumber,
+      maintenanceDate: data.maintenanceDate,
+      description: data.description,
+      cost: data.cost,
+      performedBy: data.performedBy,
+    },
   });
-  console.log(event.data);
+
+  if (response.status.code === ResponseStatusCode.OK) {
+    toast.add({
+      title: "Success",
+      description: "Maintenance has been successfully created.",
+      color: "success",
+    });
+    emit("onSubmitted");
+  } else {
+    toast.add({
+      title: "Error",
+      description: response.status.errorMessage,
+      color: "error",
+    });
+  }
+
+  isSubmitting.value = false;
+  finish();
 };
 
-const emit = defineEmits(["onCancel"]);
+const handleUpdateMaintenance = async (id: number, data: Schema) => {
+  start();
+  isSubmitting.value = true;
+
+  const response = await useApi<Maintenance>(`/api/maintenance/${id}`, {
+    method: "PUT",
+    body: {
+      serialNumber: data.serialNumber,
+      maintenanceDate: data.maintenanceDate,
+      description: data.description,
+      cost: data.cost,
+      performedBy: data.performedBy,
+    },
+  });
+
+  if (response.status.code === ResponseStatusCode.OK) {
+    toast.add({
+      title: "Success",
+      description: "Maintenance has been successfully updated.",
+      color: "success",
+    });
+    emit("onSubmitted");
+  } else {
+    toast.add({
+      title: "Error",
+      description: response.status.errorMessage,
+      color: "error",
+    });
+  }
+
+  isSubmitting.value = false;
+  finish();
+};
+
+const onSubmit = async (event: FormSubmitEvent<Schema>) => {
+  if (props.action === "Create") {
+    handleCreateMaintenance(event.data);
+  } else if (props.action === "Edit" && props.initialData) {
+    handleUpdateMaintenance(props.initialData.id, event.data);
+  }
+};
+
+const emit = defineEmits(["onCancel", "onSubmitted"]);
 </script>
