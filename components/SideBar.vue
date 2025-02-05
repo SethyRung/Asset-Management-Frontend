@@ -72,11 +72,6 @@ const items = ref([
     icon: "i-lucide-history",
     to: "/history",
   },
-  {
-    label: "Help / support",
-    icon: "i-lucide-circle-help",
-    to: "/help",
-  },
 ]);
 
 const config = useRuntimeConfig();

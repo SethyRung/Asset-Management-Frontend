@@ -14,7 +14,20 @@ export const useProfileStore = defineStore(
       role: "",
     });
 
-    return { profile };
+    const $reset = () => {
+      Object.assign(profile, {
+        id: 0,
+        firstName: "",
+        lastName: "",
+        username: "",
+        email: "",
+        joinDate: "",
+        status: false,
+        role: "",
+      });
+    };
+
+    return { profile, $reset };
   },
   {
     persist: true,

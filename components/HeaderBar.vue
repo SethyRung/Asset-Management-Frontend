@@ -27,12 +27,26 @@
 </template>
 
 <script lang="ts" setup>
+import { ResponseStatusCode } from "~/enums/base";
+
 const isOpen = defineModel("isOpen", {
   type: Boolean,
   default: false,
 });
 
+const toast = useToast();
+const { start, finish } = useLoadingIndicator();
+
 const profileStore = useProfileStore();
+const accessToken = useCookie("access_token", {
+  secure: true,
+  sameSite: "strict",
+});
+const refreshToken = useCookie("refresh_token", {
+  secure: true,
+  sameSite: "strict",
+});
+const isAuthenticated = useCookie<boolean>("isAuthenticated");
 
 const handleSideBarClick = () => {
   isOpen.value = !isOpen.value;
@@ -48,8 +62,23 @@ const items = [
     {
       label: "Logout",
       icon: "i-lucide-log-out",
-      onSelect: () => {
-        console.log("logout");
+      onSelect: async () => {
+        start();
+        const response = await useApi("/api/auth/logout", { method: "GET" });
+        finish();
+        if (response.status.code === ResponseStatusCode.OK) {
+          accessToken.value = null;
+          refreshToken.value = null;
+          isAuthenticated.value = false;
+          profileStore.$reset();
+          navigateTo("/sign-in", { replace: true });
+        } else {
+          toast.add({
+            title: "Error",
+            description: response.status.errorMessage,
+            color: "error",
+          });
+        }
       },
     },
   ],

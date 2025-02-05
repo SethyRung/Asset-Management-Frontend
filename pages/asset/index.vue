@@ -250,44 +250,7 @@ const page = ref<number>(0);
 const size = ref<number>(10);
 const total = ref<number>(0);
 
-const data = ref<Asset[]>([
-  {
-    id: 1,
-    name: "Laptop",
-    serialNumber: "SN123456",
-    categoryId: 1,
-    status: "Active",
-    location: "Office",
-    acquisitionDate: "2022-01-15",
-    assignedTo: 101,
-    warrantyExpiryDate: "2023-01-15",
-    documents: ["invoice.pdf", "warranty.pdf"],
-  },
-  {
-    id: 2,
-    name: "Projector",
-    serialNumber: "SN654321",
-    categoryId: 2,
-    status: "Repair",
-    location: "Repair Center",
-    acquisitionDate: "2021-05-20",
-    assignedTo: 102,
-    warrantyExpiryDate: "2023-05-20",
-    documents: ["invoice.pdf", "warranty.pdf"],
-  },
-  {
-    id: 3,
-    name: "Printer",
-    serialNumber: "SN789012",
-    categoryId: 3,
-    status: "Active",
-    location: "Office",
-    acquisitionDate: "2020-11-10",
-    assignedTo: 103,
-    warrantyExpiryDate: "2022-11-10",
-    documents: ["invoice.pdf", "warranty.pdf"],
-  },
-]);
+const data = ref<Asset[]>([]);
 
 const handleSuccess = (response: ResponseBody<PaginationResponse<Asset>>) => {
   if (response.status.code === ResponseStatusCode.OK) {
