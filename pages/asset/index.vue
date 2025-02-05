@@ -124,9 +124,8 @@ const columns: TableColumn<Asset>[] = [
     accessorKey: "categoryName",
     header: "Category",
     cell: ({ row }) => {
-      return categoryList.value.find(
-        ({ id }) => id === row.original.categoryId,
-      )!.name;
+      return categoryList.value.find(({ id }) => id === row.original.categoryId)
+        ?.name;
     },
   },
   {
@@ -167,8 +166,8 @@ const columns: TableColumn<Asset>[] = [
     accessorKey: "assignedTo",
     header: "Assigned To",
     cell: ({ row }) => {
-      return userList.value.find(({ id }) => id === row.original.assignedTo)!
-        .username;
+      return userList.value.find(({ id }) => id === row.original.assignedTo)
+        ?.username;
     },
   },
   {

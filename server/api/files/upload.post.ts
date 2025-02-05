@@ -22,24 +22,13 @@ export default defineEventHandler(async (event) => {
     new File([file.data], file.filename ?? "", { type: file.type }),
     file.filename,
   );
-  // return await api(
-  //   "/files/upload",
-  //   {
-  //     method: "POST",
-  //     body: newFormData,
-  //     timeout: 60000,
-  //   },
-  //   event,
-  // );
-  return {
-    status: {
-      code: "0",
-      errorCode: "string",
-      errorMessage: "string",
-      warningMessage: "string",
-      requestId: "string",
-      requestTime: 0,
+  return await api(
+    "/files/upload",
+    {
+      method: "POST",
+      body: newFormData,
+      timeout: 60000,
     },
-    data: file.filename,
-  };
+    event,
+  );
 });
