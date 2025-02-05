@@ -7,10 +7,9 @@
       <Icon :name="icon" size="24" />
     </div>
     <p class="text-3xl text-zinc-700 font-bold">{{ value }}</p>
-    <p class="text-xs text-zinc-500">{{ factor }} from last month</p>
   </div>
 </template>
 
 <script lang="ts" setup>
-defineProps<{ label: string; icon: string; value: number; factor: string }>();
+defineProps<{ label: string; icon: string; value: number }>();
 </script>
