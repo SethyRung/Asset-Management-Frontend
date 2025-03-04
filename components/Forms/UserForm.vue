@@ -67,9 +67,7 @@
         @change="handleFileUpload"
       />
       <div v-if="state.profile" class="w-full mt-2 flex flex-wrap gap-1">
-        <UBadge variant="outline" class="rounded-full">
-          {{ state.profile }}
-        </UBadge>
+        <UBadge variant="outline" class="rounded-full" :label="state.profile" />
       </div>
     </UFormField>
 
@@ -150,7 +148,7 @@ if (props.action !== "Create" && props.initialData) {
   state.username = data.username;
   state.email = data.email;
   state.role = data.role;
-  state.profile = data.email;
+  state.profile = data.profile;
 }
 
 const handleFileUpload = async (event: Event) => {

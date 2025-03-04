@@ -1,7 +1,8 @@
 export default defineNuxtConfig({
-  compatibilityDate: "2024-04-03",
-  devtools: { enabled: true },
+  devtools: { enabled: false },
+
   css: ["~/assets/css/main.css"],
+
   modules: [
     "@nuxt/ui",
     "@nuxt/eslint",
@@ -11,32 +12,24 @@ export default defineNuxtConfig({
     "dayjs-nuxt",
     "@nuxtjs/google-fonts",
   ],
+
   runtimeConfig: {
     apiBaseUrl: "",
     public: {
       appVersion: "",
     },
   },
-  ui: {
-    theme: {
-      colors: [
-        "primary",
-        "secondary",
-        "tertiary",
-        "info",
-        "success",
-        "warning",
-        "error",
-      ],
-    },
-  },
+
   colorMode: {
     preference: "light",
   },
+
   googleFonts: {
     download: true,
     families: {
       "IBM Plex Sans": [100, 200, 300, 400, 500, 600, 700],
     },
   },
+
+  compatibilityDate: "2025-03-04",
 });
