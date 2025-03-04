@@ -64,7 +64,7 @@
       :open="action === 'Delete'"
       title="Delete User"
       content="Are you sure to delete this user?"
-      @update:open="action = 'Create'"
+      @update:open="(action = 'Create')"
       @on-confirm="handleDeleteUser(seletedUser!.id)"
     />
   </div>
@@ -123,14 +123,11 @@ const columns: TableColumn<User>[] = [
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => {
-      return h(
-        UBadge,
-        {
-          color: row.original.status ? "success" : "error",
-          variant: "outline",
-        },
-        row.original.status ? "Active" : "Inactive",
-      );
+      return h(UBadge, {
+        color: row.original.status ? "success" : "error",
+        variant: "outline",
+        label: row.original.status ? "Active" : "Inactive",
+      });
     },
   },
   {
