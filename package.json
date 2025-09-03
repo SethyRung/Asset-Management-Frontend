@@ -10,27 +10,27 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@nuxt/ui": "^3.0.0-beta.2",
+    "@nuxt/ui": "^3.3.3",
     "@nuxtjs/google-fonts": "^3.2.0",
-    "@pinia/nuxt": "^0.10.1",
-    "@vueuse/core": "^12.7.0",
-    "@vueuse/nuxt": "^12.7.0",
-    "chart.js": "^4.4.8",
+    "@pinia/nuxt": "^0.11.2",
+    "@vueuse/core": "^13.9.0",
+    "@vueuse/nuxt": "^13.9.0",
+    "chart.js": "^4.5.0",
     "clsx": "^2.1.1",
     "dayjs-nuxt": "^2.1.11",
-    "nuxt": "^3.15.4",
-    "pinia": "^3.0.1",
-    "pinia-plugin-persistedstate": "^4.2.0",
-    "tailwind-merge": "^3.0.2",
-    "vue": "^3.5.13",
+    "nuxt": "^4.1.0",
+    "pinia": "^3.0.3",
+    "pinia-plugin-persistedstate": "^4.5.0",
+    "tailwind-merge": "^3.3.1",
+    "vue": "^3.5.21",
     "vue-chartjs": "^5.3.2",
-    "vue-router": "^4.5.0",
-    "zod": "^3.24.2"
+    "vue-router": "^4.5.1",
+    "zod": "^4.1.5"
   },
   "devDependencies": {
-    "@iconify-json/lucide": "^1.2.28",
-    "@nuxt/eslint": "^1.1.0",
-    "prettier": "^3.5.3"
+    "@iconify-json/lucide": "^1.2.66",
+    "@nuxt/eslint": "^1.9.0",
+    "prettier": "^3.6.2"
   },
   "overrides": {
     "tailwindcss": "4.0.7",
