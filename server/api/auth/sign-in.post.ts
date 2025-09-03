@@ -1,5 +1,3 @@
-import { ResponseStatusCode } from "~/enums/base";
-
 export default defineEventHandler(async (event) => {
   const requestBody = await readBody(event);
   const response = await api<{ accessToken: string; refreshToken: string }>(

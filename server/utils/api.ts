@@ -1,7 +1,5 @@
-import type { ResponseBody } from "~/types/ResponseBody";
 import type { H3Event } from "h3";
 import type { NitroFetchOptions } from "nitropack";
-import { ResponseStatusCode } from "~/enums/base";
 
 export const api = async <T>(
   url: string,
