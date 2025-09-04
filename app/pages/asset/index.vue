@@ -73,8 +73,6 @@
 <script lang="ts" setup>
 import type { TableColumn } from "@nuxt/ui";
 import type { Row } from "@tanstack/vue-table";
-import AssetForm from "~/components/Forms/AssetForm.vue";
-import DeleteDialog from "~/components/Dialogs/DeleteDialog.vue";
 import Pagination from "~/components/Inputs/Pagination.vue";
 
 const UButton = resolveComponent("UButton");
