@@ -1,45 +1,4 @@
-<template>
-  <div class="w-full h-full p-4">
-    <h1 class="mb-6 text-xl font-medium text-zinc-700">Dashboard</h1>
-    <div class="w-full mb-8 flex flex-wrap gap-4">
-      <DashboardCard
-        v-for="(item, index) in dashboardCardData"
-        :key="item.key + index"
-        :label="item.label"
-        :icon="item.icon"
-        :value="item.value"
-      />
-    </div>
-    <div class="flex flex-col tablet:flex-row justify-between gap-4">
-      <div class="w-full h-full tablet:w-[50%]">
-        <h2 class="text-base font-bold">Assets by Category</h2>
-        <div class="h-full">
-          <Bar
-            :data="assetByCateogory"
-            :options="{
-              responsive: true,
-            }"
-          />
-        </div>
-      </div>
-      <div class="w-full h-full tablet:w-[40%]">
-        <h2 class="text-base font-bold">Assets by Status</h2>
-        <div class="h-full">
-          <Doughnut
-            :data="assetByStatus"
-            :options="{
-              responsive: true,
-              maintainAspectRatio: false,
-            }"
-          />
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script lang="ts" setup>
-import DashboardCard from "~/components/Cards/DashboardCard.vue";
 import { Bar, Doughnut } from "vue-chartjs";
 
 type DashboardCardData = {
@@ -110,49 +69,7 @@ const assetByStatus = ref<{
   ],
 });
 
-const handleSuccess = (
-  response: ResponseBody<{
-    totalAsset: number;
-    activeAsset: number;
-    client: number;
-    warrantyExpired: number;
-    assetByCategory: object;
-    assetByStatus: {
-      repair: number;
-      inactive: number;
-      active: number;
-    };
-  }>,
-) => {
-  if (response.status.code === ResponseStatusCode.OK) {
-    dashboardCardData.value = dashboardCardData.value.map((item) => ({
-      ...item,
-      value:
-        (response.data[item.key as keyof typeof response.data] as number) ??
-        item.value,
-    }));
-
-    Object.keys(response.data.assetByCategory).forEach((key) => {
-      assetByCateogory.value.labels.push(key);
-      assetByCateogory.value.datasets[0].data.push(
-        response.data.assetByCategory[
-          key as keyof typeof response.data.assetByCategory
-        ],
-      );
-    });
-
-    const { active, inactive, repair } = response.data.assetByStatus;
-    assetByStatus.value.datasets[0].data = [active, inactive, repair];
-  } else {
-    toast.add({
-      title: "Error",
-      description: response.status.errorMessage,
-      color: "error",
-    });
-  }
-};
-
-const { data: response, status } = await useFetchApi<{
+const { data, status } = await useFetchApi<{
   totalAsset: number;
   activeAsset: number;
   client: number;
@@ -167,13 +84,75 @@ const { data: response, status } = await useFetchApi<{
   method: "GET",
   lazy: true,
 });
-if (status.value === "success" && response.value) {
-  handleSuccess(response.value);
-}
+if (status.value === "success" && data.value) {
+  const response = data.value;
+  if (response.status.code === ResponseStatusCode.OK) {
+    dashboardCardData.value = dashboardCardData.value.map((item) => ({
+      ...item,
+      value:
+        (response.data[item.key as keyof typeof response.data] as number) ??
+        item.value,
+    }));
 
-watch(response, (newResponse) => {
-  if (newResponse) {
-    handleSuccess(newResponse);
+    Object.keys(
+      response.data.assetByCategory as Record<string, number>,
+    ).forEach((key) => {
+      assetByCateogory.value.labels.push(key);
+      assetByCateogory.value.datasets[0]?.data.push(
+        response.data.assetByCategory[
+          key as keyof typeof response.data.assetByCategory
+        ],
+      );
+    });
+
+    const { active, inactive, repair } = response.data.assetByStatus;
+    assetByStatus.value.datasets[0]!.data = [active, inactive, repair];
+  } else {
+    toast.add({
+      title: "Error",
+      description: response.status.errorMessage,
+      color: "error",
+    });
   }
-});
+}
 </script>
+
+<template>
+  <div class="w-full h-full p-4">
+    <h1 class="mb-6 text-xl font-medium text-zinc-700">Dashboard</h1>
+    <div class="w-full mb-8 flex flex-wrap gap-4">
+      <DashboardCard
+        v-for="(item, index) in dashboardCardData"
+        :key="item.key + index"
+        :label="item.label"
+        :icon="item.icon"
+        :value="item.value"
+      />
+    </div>
+    <div class="flex flex-col tablet:flex-row justify-between gap-4">
+      <div class="w-full h-full tablet:w-[50%]">
+        <h2 class="text-base font-bold">Assets by Category</h2>
+        <div class="h-full">
+          <Bar
+            :data="assetByCateogory"
+            :options="{
+              responsive: true,
+            }"
+          />
+        </div>
+      </div>
+      <div class="w-full h-full tablet:w-[40%]">
+        <h2 class="text-base font-bold">Assets by Status</h2>
+        <div class="h-full">
+          <Doughnut
+            :data="assetByStatus"
+            :options="{
+              responsive: true,
+              maintainAspectRatio: false,
+            }"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
