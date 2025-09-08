@@ -1,9 +1,7 @@
 export type ResponseBody<T> = {
   status: {
     code: string;
-    errorCode: string;
-    errorMessage: string;
-    warningMessage: string;
+    message: string;
     requestId: string;
     requestTime: number;
   };

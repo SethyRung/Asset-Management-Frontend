@@ -38,10 +38,8 @@ export const api = async <T>(
     return {
       status: {
         code: ResponseStatusCode.INTERNAL_SERVER_ERROR,
-        errorCode: null,
-        errorMessage:
+        mssage:
           "Client-server error occurred. Please try again later or contact support.",
-        warningMessage: null,
         requestId: "",
         requestTime: 0,
       },

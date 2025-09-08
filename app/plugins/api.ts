@@ -28,7 +28,7 @@ export default defineNuxtPlugin((nuxtApp) => {
         if (
           res &&
           res.status.code === ResponseStatusCode.UNAUTHORIZED &&
-          res.status.errorMessage.includes(ACCESS_TOKEN_EXPIRED) &&
+          res.status.message.includes(ACCESS_TOKEN_EXPIRED) &&
           refreshToken.value
         ) {
           try {
