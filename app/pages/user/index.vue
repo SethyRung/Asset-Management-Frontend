@@ -1,80 +1,6 @@
-<template>
-  <div class="w-full h-full p-4 relative">
-    <div class="mb-6 flex flex-wrap justify-between items-center gap-6">
-      <h1 class="text-xl font-medium text-zinc-700">User</h1>
-      <UButton
-        color="neutral"
-        variant="outline"
-        icon="i-lucide-circle-plus"
-        label="Add User"
-        @click="
-          () => {
-            isModalOpen = true;
-            action = 'Create';
-          }
-        "
-      />
-    </div>
-    <UButtonGroup
-      class="w-full mobile:w-64 mb-6 left-[100%] translate-x-[-100%]"
-    >
-      <UInput
-        v-model="search"
-        color="neutral"
-        variant="outline"
-        placeholder="Search ..."
-        :ui="{ root: 'grow' }"
-      />
-
-      <UTooltip text="Search">
-        <UButton color="neutral" icon="i-lucide-search" @click="getUsers" />
-      </UTooltip>
-    </UButtonGroup>
-    <UTable
-      :columns="columns"
-      :data="data"
-      :loading="status === 'pending'"
-      class="flex-1"
-    />
-    <Pagination
-      v-model:page="page"
-      v-model:items-per-page="size"
-      :total="total"
-    />
-    <UModal
-      v-model:open="isModalOpen"
-      :title="`${action} User`"
-      :ui="{ content: 'max-w-96' }"
-    >
-      <template #body>
-        <UserForm
-          :action="action"
-          :initial-data="seletedUser"
-          @on-cancel="clearData()"
-          @on-submitted="
-            () => {
-              clearData();
-              getUsers();
-            }
-          "
-        />
-      </template>
-    </UModal>
-    <DeleteDialog
-      :open="action === 'Delete'"
-      title="Delete User"
-      content="Are you sure to delete this user?"
-      @update:open="action = 'Create'"
-      @on-confirm="handleDeleteUser(seletedUser!.id)"
-    />
-  </div>
-</template>
-
 <script lang="ts" setup>
 import type { TableColumn } from "@nuxt/ui";
 import type { Row } from "@tanstack/vue-table";
-import UserForm from "~/components/Forms/UserForm.vue";
-import DeleteDialog from "~/components/Dialogs/DeleteDialog.vue";
 import Pagination from "~/components/Inputs/Pagination.vue";
 
 const UButton = resolveComponent("UButton");
@@ -217,7 +143,7 @@ const handleSuccess = (response: ResponseBody<PaginationResponse<User>>) => {
   } else {
     toast.add({
       title: "Error",
-      description: response.status.errorMessage,
+      description: response.status.message,
       color: "error",
     });
   }
@@ -269,7 +195,7 @@ const handleDeleteUser = async (id: number) => {
   } else {
     toast.add({
       title: "Error",
-      description: response.status.errorMessage,
+      description: response.status.message,
       color: "error",
     });
   }
@@ -283,3 +209,75 @@ const clearData = () => {
   seletedUser.value = undefined;
 };
 </script>
+
+<template>
+  <div class="w-full h-full p-4 relative">
+    <div class="mb-6 flex flex-wrap justify-between items-center gap-6">
+      <h1 class="text-xl font-medium text-zinc-700">User</h1>
+      <UButton
+        color="neutral"
+        variant="outline"
+        icon="i-lucide-circle-plus"
+        label="Add User"
+        @click="
+          () => {
+            isModalOpen = true;
+            action = 'Create';
+          }
+        "
+      />
+    </div>
+    <UButtonGroup
+      class="w-full mobile:w-64 mb-6 left-[100%] translate-x-[-100%]"
+    >
+      <UInput
+        v-model="search"
+        color="neutral"
+        variant="outline"
+        placeholder="Search ..."
+        :ui="{ root: 'grow' }"
+      />
+
+      <UTooltip text="Search">
+        <UButton color="neutral" icon="i-lucide-search" @click="getUsers" />
+      </UTooltip>
+    </UButtonGroup>
+    <UTable
+      :columns="columns"
+      :data="data"
+      :loading="status === 'pending'"
+      class="flex-1"
+    />
+    <Pagination
+      v-model:page="page"
+      v-model:items-per-page="size"
+      :total="total"
+    />
+    <UModal
+      v-model:open="isModalOpen"
+      :title="`${action} User`"
+      :ui="{ content: 'max-w-96' }"
+    >
+      <template #body>
+        <UserForm
+          :action="action"
+          :initial-data="seletedUser"
+          @on-cancel="clearData()"
+          @on-submitted="
+            () => {
+              clearData();
+              getUsers();
+            }
+          "
+        />
+      </template>
+    </UModal>
+    <DeleteDialog
+      :open="action === 'Delete'"
+      title="Delete User"
+      content="Are you sure to delete this user?"
+      @update:open="action = 'Create'"
+      @on-confirm="handleDeleteUser(seletedUser!.id)"
+    />
+  </div>
+</template>
