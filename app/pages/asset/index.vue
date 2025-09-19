@@ -1,75 +1,3 @@
-<template>
-  <div class="w-full h-full p-4 relative">
-    <div class="mb-6 flex flex-wrap justify-between items-center gap-6">
-      <h1 class="text-xl font-medium text-zinc-700">Asset</h1>
-      <UButton
-        color="neutral"
-        variant="outline"
-        icon="i-lucide-circle-plus"
-        label="Add Asset"
-        @click="
-          () => {
-            isModalOpen = true;
-            action = 'Create';
-          }
-        "
-      />
-    </div>
-    <UButtonGroup
-      class="w-full mobile:w-64 mb-6 left-[100%] translate-x-[-100%]"
-    >
-      <UInput
-        v-model="search"
-        color="neutral"
-        variant="outline"
-        placeholder="Search ..."
-        :ui="{ root: 'grow' }"
-      />
-
-      <UTooltip text="Search">
-        <UButton color="neutral" icon="i-lucide-search" @click="getAsset" />
-      </UTooltip>
-    </UButtonGroup>
-    <UTable
-      :loading="status === 'pending'"
-      :columns="columns"
-      :data="data"
-      class="flex-1"
-    />
-    <Pagination
-      v-model:page="page"
-      v-model:items-per-page="size"
-      :total="total"
-    />
-    <UModal
-      v-model:open="isModalOpen"
-      :title="`${action} Asset`"
-      :ui="{ content: 'max-w-96' }"
-    >
-      <template #body>
-        <AssetForm
-          :action="action"
-          :initial-data="seletedAsset"
-          @on-cancel="clearData()"
-          @on-submitted="
-            () => {
-              clearData();
-              getAsset();
-            }
-          "
-        />
-      </template>
-    </UModal>
-    <DeleteDialog
-      :open="action === 'Delete'"
-      title="Delete Asset"
-      content="Are you sure to delete this asset?"
-      @update:open="action = 'Create'"
-      @on-confirm="handleDeleteAsset(seletedAsset!.id)"
-    />
-  </div>
-</template>
-
 <script lang="ts" setup>
 import type { TableColumn } from "@nuxt/ui";
 import type { Row } from "@tanstack/vue-table";
@@ -258,7 +186,7 @@ const handleSuccess = (response: ResponseBody<PaginationResponse<Asset>>) => {
   } else {
     toast.add({
       title: "Error",
-      description: response.status.errorMessage,
+      description: response.status.message,
       color: "error",
     });
   }
@@ -310,7 +238,7 @@ const handleDeleteAsset = async (id: number) => {
   } else {
     toast.add({
       title: "Error",
-      description: response.status.errorMessage,
+      description: response.status.message,
       color: "error",
     });
   }
@@ -324,3 +252,75 @@ const clearData = () => {
   seletedAsset.value = undefined;
 };
 </script>
+
+<template>
+  <div class="w-full h-full p-4 relative">
+    <div class="mb-6 flex flex-wrap justify-between items-center gap-6">
+      <h1 class="text-xl font-medium text-zinc-700">Asset</h1>
+      <UButton
+        color="neutral"
+        variant="outline"
+        icon="i-lucide-circle-plus"
+        label="Add Asset"
+        @click="
+          () => {
+            isModalOpen = true;
+            action = 'Create';
+          }
+        "
+      />
+    </div>
+    <UButtonGroup
+      class="w-full mobile:w-64 mb-6 left-[100%] translate-x-[-100%]"
+    >
+      <UInput
+        v-model="search"
+        color="neutral"
+        variant="outline"
+        placeholder="Search ..."
+        :ui="{ root: 'grow' }"
+      />
+
+      <UTooltip text="Search">
+        <UButton color="neutral" icon="i-lucide-search" @click="getAsset" />
+      </UTooltip>
+    </UButtonGroup>
+    <UTable
+      :loading="status === 'pending'"
+      :columns="columns"
+      :data="data"
+      class="flex-1"
+    />
+    <Pagination
+      v-model:page="page"
+      v-model:items-per-page="size"
+      :total="total"
+    />
+    <UModal
+      v-model:open="isModalOpen"
+      :title="`${action} Asset`"
+      :ui="{ content: 'max-w-96' }"
+    >
+      <template #body>
+        <AssetForm
+          :action="action"
+          :initial-data="seletedAsset"
+          @on-cancel="clearData()"
+          @on-submitted="
+            () => {
+              clearData();
+              getAsset();
+            }
+          "
+        />
+      </template>
+    </UModal>
+    <DeleteDialog
+      :open="action === 'Delete'"
+      title="Delete Asset"
+      content="Are you sure to delete this asset?"
+      @update:open="action = 'Create'"
+      @on-confirm="handleDeleteAsset(seletedAsset!.id)"
+    />
+  </div>
+</template>

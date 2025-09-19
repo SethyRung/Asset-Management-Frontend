@@ -1,32 +1,3 @@
-<template>
-  <div class="w-full h-full p-4 relative">
-    <div class="mb-6 flex flex-wrap justify-between items-center gap-6">
-      <h1 class="text-xl font-medium text-zinc-700">History</h1>
-    </div>
-    <UButtonGroup
-      class="w-full mobile:w-64 mb-6 left-[100%] translate-x-[-100%]"
-    >
-      <UInput
-        v-model="search"
-        color="neutral"
-        variant="outline"
-        placeholder="Search ..."
-        :ui="{ root: 'grow' }"
-      />
-
-      <UTooltip text="Search">
-        <UButton color="neutral" icon="i-lucide-search" @click="getCategory" />
-      </UTooltip>
-    </UButtonGroup>
-    <UTable :columns="columns" :data="data" class="flex-1" />
-    <Pagination
-      v-model:page="page"
-      v-model:items-per-page="size"
-      :total="total"
-    />
-  </div>
-</template>
-
 <script lang="ts" setup>
 import type { TableColumn } from "@nuxt/ui";
 import Pagination from "~/components/Inputs/Pagination.vue";
@@ -35,7 +6,7 @@ const UButton = resolveComponent("UButton");
 
 const toast = useToast();
 
-const columns: TableColumn<Category>[] = [
+const columns: TableColumn<History>[] = [
   {
     accessorKey: "id",
     header: "#",
@@ -95,7 +66,7 @@ const handleSuccess = (
   } else {
     toast.add({
       title: "Error",
-      description: response.status.errorMessage,
+      description: response.status.message,
       color: "error",
     });
   }
@@ -129,3 +100,32 @@ watch(response, (newResponse) => {
   }
 });
 </script>
+
+<template>
+  <div class="w-full h-full p-4 relative">
+    <div class="mb-6 flex flex-wrap justify-between items-center gap-6">
+      <h1 class="text-xl font-medium text-zinc-700">History</h1>
+    </div>
+    <UButtonGroup
+      class="w-full mobile:w-64 mb-6 left-[100%] translate-x-[-100%]"
+    >
+      <UInput
+        v-model="search"
+        color="neutral"
+        variant="outline"
+        placeholder="Search ..."
+        :ui="{ root: 'grow' }"
+      />
+
+      <UTooltip text="Search">
+        <UButton color="neutral" icon="i-lucide-search" @click="getCategory" />
+      </UTooltip>
+    </UButtonGroup>
+    <UTable :columns="columns" :data="data" class="flex-1" />
+    <Pagination
+      v-model:page="page"
+      v-model:items-per-page="size"
+      :total="total"
+    />
+  </div>
+</template>

@@ -1,75 +1,6 @@
-<template>
-  <div class="w-full h-full p-4 relative">
-    <div class="mb-6 flex flex-wrap justify-between items-center gap-6">
-      <h1 class="text-xl font-medium text-zinc-700">Category</h1>
-      <UButton
-        color="neutral"
-        variant="outline"
-        icon="i-lucide-circle-plus"
-        label="Add Category"
-        @click="
-          () => {
-            isModalOpen = true;
-            action = 'Create';
-          }
-        "
-      />
-    </div>
-    <UButtonGroup
-      class="w-full mobile:w-64 mb-6 left-[100%] translate-x-[-100%]"
-    >
-      <UInput
-        v-model="search"
-        color="neutral"
-        variant="outline"
-        placeholder="Search ..."
-        :ui="{ root: 'grow' }"
-      />
-
-      <UTooltip text="Search">
-        <UButton color="neutral" icon="i-lucide-search" @click="getCategory" />
-      </UTooltip>
-    </UButtonGroup>
-    <UTable :columns="columns" :data="data" class="flex-1" />
-    <Pagination
-      v-model:page="page"
-      v-model:items-per-page="size"
-      :total="total"
-    />
-    <UModal
-      v-model:open="isModalOpen"
-      :title="`${action} Category`"
-      :ui="{ content: 'max-w-96' }"
-    >
-      <template #body>
-        <CategoryForm
-          :action="action"
-          :initial-data="seletedCategory"
-          @on-cancel="clearData()"
-          @on-submitted="
-            () => {
-              clearData();
-              getCategory();
-            }
-          "
-        />
-      </template>
-    </UModal>
-    <DeleteDialog
-      :open="action === 'Delete'"
-      title="Delete Category"
-      content="Are you sure to delete this category?"
-      @update:open="action = 'Create'"
-      @on-confirm="handleDeleteCategory(seletedCategory!.id)"
-    />
-  </div>
-</template>
-
 <script lang="ts" setup>
 import type { TableColumn } from "@nuxt/ui";
 import type { Row } from "@tanstack/vue-table";
-import CategoryForm from "~/components/Forms/CategoryForm.vue";
-import DeleteDialog from "~/components/Dialogs/DeleteDialog.vue";
 import Pagination from "~/components/Inputs/Pagination.vue";
 
 const UButton = resolveComponent("UButton");
@@ -185,7 +116,7 @@ const handleSuccess = (
   } else {
     toast.add({
       title: "Error",
-      description: response.status.errorMessage,
+      description: response.status.message,
       color: "error",
     });
   }
@@ -237,7 +168,7 @@ const handleDeleteCategory = async (id: number) => {
   } else {
     toast.add({
       title: "Error",
-      description: response.status.errorMessage,
+      description: response.status.message,
       color: "error",
     });
   }
@@ -251,3 +182,70 @@ const clearData = () => {
   seletedCategory.value = undefined;
 };
 </script>
+
+<template>
+  <div class="w-full h-full p-4 relative">
+    <div class="mb-6 flex flex-wrap justify-between items-center gap-6">
+      <h1 class="text-xl font-medium text-zinc-700">Category</h1>
+      <UButton
+        color="neutral"
+        variant="outline"
+        icon="i-lucide-circle-plus"
+        label="Add Category"
+        @click="
+          () => {
+            isModalOpen = true;
+            action = 'Create';
+          }
+        "
+      />
+    </div>
+    <UButtonGroup
+      class="w-full mobile:w-64 mb-6 left-[100%] translate-x-[-100%]"
+    >
+      <UInput
+        v-model="search"
+        color="neutral"
+        variant="outline"
+        placeholder="Search ..."
+        :ui="{ root: 'grow' }"
+      />
+
+      <UTooltip text="Search">
+        <UButton color="neutral" icon="i-lucide-search" @click="getCategory" />
+      </UTooltip>
+    </UButtonGroup>
+    <UTable :columns="columns" :data="data" class="flex-1" />
+    <Pagination
+      v-model:page="page"
+      v-model:items-per-page="size"
+      :total="total"
+    />
+    <UModal
+      v-model:open="isModalOpen"
+      :title="`${action} Category`"
+      :ui="{ content: 'max-w-96' }"
+    >
+      <template #body>
+        <CategoryForm
+          :action="action"
+          :initial-data="seletedCategory"
+          @on-cancel="clearData()"
+          @on-submitted="
+            () => {
+              clearData();
+              getCategory();
+            }
+          "
+        />
+      </template>
+    </UModal>
+    <DeleteDialog
+      :open="action === 'Delete'"
+      title="Delete Category"
+      content="Are you sure to delete this category?"
+      @update:open="action = 'Create'"
+      @on-confirm="handleDeleteCategory(seletedCategory!.id)"
+    />
+  </div>
+</template>
