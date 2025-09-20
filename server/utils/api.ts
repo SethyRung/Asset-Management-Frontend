@@ -1,7 +1,5 @@
-import type { ResponseBody } from "~/types/ResponseBody";
 import type { H3Event } from "h3";
 import type { NitroFetchOptions } from "nitropack";
-import { ResponseStatusCode } from "~/enums/base";
 
 export const api = async <T>(
   url: string,
@@ -40,10 +38,8 @@ export const api = async <T>(
     return {
       status: {
         code: ResponseStatusCode.INTERNAL_SERVER_ERROR,
-        errorCode: null,
-        errorMessage:
+        mssage:
           "Client-server error occurred. Please try again later or contact support.",
-        warningMessage: null,
         requestId: "",
         requestTime: 0,
       },

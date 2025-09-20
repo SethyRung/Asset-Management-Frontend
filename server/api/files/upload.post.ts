@@ -1,5 +1,3 @@
-import { ResponseStatusCode } from "~/enums/base";
-
 export default defineEventHandler(async (event) => {
   const formData = await readMultipartFormData(event);
   if (!formData || formData.length === 0)
